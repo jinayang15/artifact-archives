@@ -1,2 +1,5 @@
-# library
-Interactive library for user to store books in
+# artifact-archives
+Place to store your Genshin Artifacts!
+
+Features to implement:
+

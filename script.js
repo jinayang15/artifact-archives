@@ -1,4 +1,4 @@
-const artifacts = [];
+const artifacts = [randomArtifactGenerator(), randomArtifactGenerator()];
 
 /* 
     String set - what set the artifact belongs to
@@ -15,16 +15,15 @@ function Artifact(set, type, rarity, level, mainstat, substats) {
   this.level = level;
   this.mainstat = mainstat;
   this.substats = substats;
-  this.toString() = () => {
-    let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`
-    for (let i = 1; i <= this.substats.length; i++) {
-        output += `Substat ${i}: ${this.substats[i-1]}\n`
-    }
-    output.trim();
-    return output;
-  }
 }
-
+Artifact.prototype.toString = function () {
+  let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
+  for (let i = 1; i <= this.substats.length; i++) {
+    output += `Substat ${i}: ` + this.substats[i - 1] + "\n";
+  }
+  output.trim();
+  return output;
+};
 /*
     String type - type of stat
     Number value - amount of stat
@@ -35,17 +34,36 @@ function Stat(type, value, unit) {
   this.type = type;
   this.value = value;
   this.unit = unit;
-  this.toString() = () => {
-    return `${this.value}${this.unit} ${this.type}`
-  }
 }
+Stat.prototype.toString = function () {
+  return `${this.value}${this.unit} ${this.type}`;
+};
 
 function addArtifactToCollection(artifact) {
   artifacts.push(artifact);
 }
 
-function main() {
-    
+// for testing purposes
+function randomArtifactGenerator() {
+  const set = "blahblahblah";
+  const type = "flower";
+  const rarity = Math.floor(Math.random() * 5) + 1;
+  const level = Math.floor(Math.random() * 20) + 1;
+  const mainstat = new Stat("HP%", 10, "%");
+  const substat = new Stat("DEF%", 17.9, "%");
+  const artifact = new Artifact(set, type, rarity, level, mainstat, [substat]);
+  console.log(artifact);
+  return artifact;
 }
 
-main()
+function main() {
+  const collectionDiv = document.querySelector(".artifact-collection");
+  for (const artifact of artifacts) {
+    const artifactDiv = document.createElement("div");
+    artifactDiv.classList.add("artifact");
+    artifactDiv.textContent = "" + artifact;
+    collectionDiv.appendChild(artifactDiv);
+  }
+}
+
+main();
