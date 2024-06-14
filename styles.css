@@ -62,3 +62,11 @@ h6 {
   isolation: isolate;
 }
 /* Reset end */
+
+body {
+    
+}
+
+.library {
+  margin: 2rem;
+}
