@@ -74,9 +74,12 @@ h6 {
 :root {
   --dark-navy-blue: #0c1a42;
   --gold: #ae7232;
-  --white: #ffffff;
-  --grey: #75716b;
+  --bright-yellow: #ffae00;
+  --dusty-yellow: #e5a236;
+  --white: #fff8ed;
+  --grey: #6b6c75;
   --silver: #aba4a0;
+  --dusty-purple: #6b5454;
 }
 
 body {
@@ -95,9 +98,24 @@ body {
   padding: 2rem;
 }
 
-.artifact {
-  background-color: var(--gold);
+.artifact-head,
+.artifact-stats {
   padding: 1rem;
+}
+
+.artifact-head {
+  background: radial-gradient(
+    circle farthest-corner at bottom right,
+    var(--dusty-yellow),
+    var(--dusty-purple)
+  );
+  color: var(--white);
+  font-size: 2em;
+}
+
+.artifact-stats {
+  background-color: var(--white);
+  color: var(--grey);
 }
 
 .add-new {
@@ -105,10 +123,5 @@ body {
   color: var(--silver);
   border: 5px dotted var(--silver);
   font-weight: lighter;
-  font-size: 3rem;
-}
-
-.artifact,
-.add-new {
-  border-radius: 1rem;
+  font-size: 3em;
 }

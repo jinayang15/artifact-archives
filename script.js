@@ -41,14 +41,28 @@ Stat.prototype.toString = function () {
 
 function addArtifactToCollection(collectionDiv, artifact) {
   const artifactDiv = document.createElement("div");
+  const artifactHeader = document.createElement("div");
+  const artifactStats = document.createElement("div");
   artifactDiv.classList.add("artifact");
+  artifactHeader.classList.add("artifact-head");
+  artifactStats.classList.add("artifact-stats");
+
+  artifactHeader.textContent = "Artifact Set";
+
   const infoArr = String(artifact).split("\n");
   for (const stat of infoArr) {
     const text = document.createElement("p");
     text.textContent = stat;
-    artifactDiv.appendChild(text);
+    artifactStats.appendChild(text);
   }
+
+  artifactDiv.appendChild(artifactHeader);
+  artifactDiv.appendChild(artifactStats);
   collectionDiv.appendChild(artifactDiv, collectionDiv.lastChild);
+}
+
+function addNewArtifactForm() {
+  
 }
 
 // for testing purposes
@@ -69,6 +83,9 @@ function main() {
   for (artifact of artifacts) {
     addArtifactToCollection(collectionDiv, artifact);
   }
+
+  const addNewButton = document.querySelector(".add-new");
+  addNewButton.addEventListener("click", addNewArtifactForm);
 }
 
 main();
