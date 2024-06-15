@@ -24,12 +24,12 @@ Artifact.prototype.toString = function () {
   output.trim();
   return output;
 };
+
 /*
     String type - type of stat
     Number value - amount of stat
     String unit - unit of value
 */
-
 function Stat(type, value, unit) {
   this.type = type;
   this.value = value;
@@ -39,8 +39,16 @@ Stat.prototype.toString = function () {
   return `${this.value}${this.unit} ${this.type}`;
 };
 
-function addArtifactToCollection(artifact) {
-  artifacts.push(artifact);
+function addArtifactToCollection(collectionDiv, artifact) {
+  const artifactDiv = document.createElement("div");
+  artifactDiv.classList.add("artifact");
+  const infoArr = String(artifact).split("\n");
+  for (const stat of infoArr) {
+    const text = document.createElement("p");
+    text.textContent = stat;
+    artifactDiv.appendChild(text);
+  }
+  collectionDiv.appendChild(artifactDiv, collectionDiv.lastChild);
 }
 
 // for testing purposes
@@ -58,11 +66,8 @@ function randomArtifactGenerator() {
 
 function main() {
   const collectionDiv = document.querySelector(".artifact-collection");
-  for (const artifact of artifacts) {
-    const artifactDiv = document.createElement("div");
-    artifactDiv.classList.add("artifact");
-    artifactDiv.textContent = "" + artifact;
-    collectionDiv.appendChild(artifactDiv);
+  for (artifact of artifacts) {
+    addArtifactToCollection(collectionDiv, artifact);
   }
 }
 
