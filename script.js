@@ -2,7 +2,7 @@ const artifacts = [randomArtifactGenerator(), randomArtifactGenerator()];
 
 /* 
     String set - what set the artifact belongs to
-    String type - whether it is flower, feather, timepiece, goblet, or circlet
+    String type - whether it is flower, feather, sands, goblet, or circlet
     Number rarity - 1 to 5 stars
     Number level - number from 1 - 20
     Stat mainstat - artifact main stat
@@ -61,8 +61,31 @@ function addArtifactToCollection(collectionDiv, artifact) {
   collectionDiv.appendChild(artifactDiv, collectionDiv.lastChild);
 }
 
-function addNewArtifactForm() {
-  
+function createNewArtifact() {
+  const artifactSet = document.querySelector("#artifact-set").value;
+  const artifactType = document.querySelector("#artifact-type").value;
+  const artifactRarity = document.querySelector("#artifact-rarity").value;
+  const artifactLevel = document.querySelector("#artifact-level").value;
+  const artifactMainstat = document.querySelector("#artifact-mainstat").value;
+  const artifactMainstatValue = document.querySelector(
+    "#artifact-mainstat-value"
+  ).value;
+  const artifactSubstat = document.querySelector("#artifact-substat-1").value;
+  const artifactSubstatValue = document.querySelector(
+    "#artifact-substat-1-value"
+  ).value;
+
+  const mainstat = new Stat(artifactMainstat, artifactMainstatValue, "");
+  const substat = new Stat(artifactSubstat, artifactSubstatValue, "");
+  const artifact = new Artifact(
+    artifactSet,
+    artifactType,
+    artifactRarity,
+    artifactLevel,
+    mainstat,
+    [substat]
+  );
+  return artifact;
 }
 
 // for testing purposes
@@ -74,7 +97,6 @@ function randomArtifactGenerator() {
   const mainstat = new Stat("HP%", 10, "%");
   const substat = new Stat("DEF%", 17.9, "%");
   const artifact = new Artifact(set, type, rarity, level, mainstat, [substat]);
-  console.log(artifact);
   return artifact;
 }
 
@@ -84,8 +106,18 @@ function main() {
     addArtifactToCollection(collectionDiv, artifact);
   }
 
+  const newArtifactForm = document.querySelector("#new-artifact");
   const addNewButton = document.querySelector(".add-new");
-  addNewButton.addEventListener("click", addNewArtifactForm);
+  addNewButton.addEventListener("click", () => {
+    newArtifactForm.showModal();
+  });
+
+  const newArtifactFormBtn = document.querySelector("#new-artifact-submit");
+  newArtifactFormBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    addArtifactToCollection(collectionDiv, createNewArtifact());
+    newArtifactForm.close();
+  });
 }
 
 main();

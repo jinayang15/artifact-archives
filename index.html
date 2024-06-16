@@ -12,7 +12,62 @@
       <button class="add-new">+</button>
     </div>
     <div class="add-new-form-container">
-      
-    </div>
+    <dialog id="new-artifact">
+      <form>
+        <label>
+          Set: 
+          <input name="artifact-set" id="artifact-set" type="text" required>
+        </label>
+        <label>
+          Type:
+          <select name="artifact-type" id="artifact-type">
+            <option value="">--Choose an option--</option>
+            <option value="flower">Flower</option>
+            <option value="feather">Feather</option>
+            <option value="sands">Sands</option>
+            <option value="goblet">Goblet</option>
+            <option value="circlet">Circlet</option>
+          </select>
+        </label>
+        <label>
+          Rarity: 
+          <input name="artifact-rarity" id="artifact-rarity" type="number" max="5" min="1" step="1" value="1">
+        </label>
+        <label>
+          Level:
+          <input name="artifact-level" id="artifact-level" type="number" max="20" min="0" step="4" value="0">
+        </label>
+        <fieldset>
+          <legend>Mainstat:</legend>
+          <select name="artifact-mainstat" id="artifact-mainstat">
+            <option value="">--Choose an option--</option>
+            <option value="HP">HP</option>
+            <option value="HP%">HP%</option>
+            <option value="ATK">ATK</option>
+            <option value="ATK%">ATK%</option>
+            <option value="DEF">DEF</option>
+            <option value="DEF%">DEF%</option>
+            <option value="EM">EM</option>
+          </select>
+          <input name="artifact-mainstat-value" id="artifact-mainstat-value" type="number">
+        </fieldset>
+        <fieldset>
+          <legend>Substat 1:</legend>
+          <select name="artifact-substat-1" id="artifact-substat-1">
+            <option value="">--Choose an option--</option>
+            <option value="HP">HP</option>
+            <option value="HP%">HP%</option>
+            <option value="ATK">ATK</option>
+            <option value="ATK%">ATK%</option>
+            <option value="DEF">DEF</option>
+            <option value="DEF%">DEF%</option>
+            <option value="EM">EM</option>
+          </select>
+          <input name="artifact-substat-1-value" id="artifact-substat-1-value" type="number">
+        </fieldset>
+        <button value="cancel" formmethod="dialog">Cancel</button>
+        <button id="new-artifact-submit" type="submit" value="add">Add</button>
+      </form>
+    </dialog>
   </body>
 </html>

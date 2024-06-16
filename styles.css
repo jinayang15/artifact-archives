@@ -125,3 +125,7 @@ body {
   font-weight: lighter;
   font-size: 3em;
 }
+
+label {
+  display: block;
+}
