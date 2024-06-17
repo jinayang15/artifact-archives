@@ -129,3 +129,10 @@ body {
 label {
   display: block;
 }
+
+#new-artifact {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
