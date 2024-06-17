@@ -1,5 +1,3 @@
-const artifacts = [randomArtifactGenerator(), randomArtifactGenerator()];
-
 /* 
     String set - what set the artifact belongs to
     String type - whether it is flower, feather, sands, goblet, or circlet
@@ -15,7 +13,11 @@ function Artifact(set, type, rarity, level, mainstat, substats) {
   this.level = level;
   this.mainstat = mainstat;
   this.substats = substats;
+  this.index = Artifact.currentIndex++;
 }
+
+Artifact.currentIndex = 0;
+
 Artifact.prototype.toString = function () {
   let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
   for (let i = 1; i <= this.substats.length; i++) {
@@ -39,16 +41,43 @@ Stat.prototype.toString = function () {
   return `${this.value}${this.unit} ${this.type}`;
 };
 
-function addArtifactToCollection(collectionDiv, artifact) {
+function hideElement(element) {
+  element.classList.add("hidden");
+}
+
+function unhideElement(element) {
+  element.classList.remove("hidden");
+}
+
+function addArtifactToCollection(artifacts, collectionDiv, artifact) {
   const artifactDiv = document.createElement("div");
   const artifactHeader = document.createElement("div");
   const artifactStats = document.createElement("div");
+  const deleteArtifactDiv = document.createElement("div");
+  const xSymbol = document.createElement("img");
+
   artifactDiv.classList.add("artifact");
-  artifactDiv.setAttribute("data-index");
+  artifactDiv.dataset.index = artifact.index;
+  artifactDiv.addEventListener("mouseover", () => {
+    unhideElement(deleteArtifactDiv);
+  });
+  artifactDiv.addEventListener("mouseout", () => {
+    hideElement(deleteArtifactDiv);
+  });
   artifactHeader.classList.add("artifact-head");
   artifactStats.classList.add("artifact-stats");
-
   artifactHeader.textContent = "Artifact Set";
+
+  hideElement(deleteArtifactDiv);
+  deleteArtifactDiv.classList.add("delete-artifact");
+  deleteArtifactDiv.dataset.index = artifact.index;
+  deleteArtifactDiv.addEventListener("click", () => {
+    removeArtifact(artifacts, collectionDiv, deleteArtifactDiv.dataset.index);
+  });
+
+  xSymbol.src = "assets/x-symbol.svg";
+  xSymbol.alt = "Delete Button";
+  deleteArtifactDiv.appendChild(xSymbol);
 
   const infoArr = String(artifact).split("\n");
   for (const stat of infoArr) {
@@ -59,7 +88,8 @@ function addArtifactToCollection(collectionDiv, artifact) {
 
   artifactDiv.appendChild(artifactHeader);
   artifactDiv.appendChild(artifactStats);
-  collectionDiv.appendChild(artifactDiv, collectionDiv.lastChild);
+  artifactDiv.appendChild(deleteArtifactDiv);
+  collectionDiv.appendChild(artifactDiv);
 }
 
 function createNewArtifact() {
@@ -69,7 +99,7 @@ function createNewArtifact() {
   const artifactLevel = document.getElementById("artifact-level").value;
   const artifactMainstat = document.getElementById("artifact-mainstat").value;
   const artifactMainstatValue = document.getElementById(
-    "#artifact-mainstat-value"
+    "artifact-mainstat-value"
   ).value;
   const artifactSubstat = document.getElementById("artifact-substat-1").value;
   const artifactSubstatValue = document.getElementById(
@@ -89,6 +119,24 @@ function createNewArtifact() {
   return artifact;
 }
 
+function removeArtifact(artifacts, collectionDiv, index) {
+  const artifactDiv = document.querySelector(
+    `.artifact[data-index='${index}']`
+  );
+  console.log(collectionDiv.removeChild(artifactDiv));
+  for (let i = 0; i < artifacts.length; i++) {
+    if (artifacts[i].index == index) {
+      artifacts.splice(i, 1);
+      break;
+    }
+  }
+}
+
+function displayAllArtifacts(artifacts, collectionDiv) {
+  for (artifact of artifacts) {
+    addArtifactToCollection(artifacts, collectionDiv, artifact);
+  }
+}
 // for testing purposes
 function randomArtifactGenerator() {
   const set = "blahblahblah";
@@ -102,10 +150,9 @@ function randomArtifactGenerator() {
 }
 
 function main() {
+  const artifacts = [randomArtifactGenerator(), randomArtifactGenerator()];
   const collectionDiv = document.querySelector(".artifact-collection");
-  for (artifact of artifacts) {
-    addArtifactToCollection(collectionDiv, artifact);
-  }
+  displayAllArtifacts(artifacts, collectionDiv);
 
   const newArtifactForm = document.getElementById("new-artifact");
   const addNewButton = document.querySelector(".add-new");
@@ -116,7 +163,7 @@ function main() {
   const newArtifactFormBtn = document.getElementById("new-artifact-submit");
   newArtifactFormBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    addArtifactToCollection(collectionDiv, createNewArtifact());
+    addArtifactToCollection(artifacts, collectionDiv, createNewArtifact());
     newArtifactForm.close();
   });
 }

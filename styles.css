@@ -90,12 +90,20 @@ body {
   color: var(--white);
 }
 
+label {
+  display: block;
+}
+
 .artifact-collection {
   display: grid;
   grid-template-columns: repeat(auto-fill, 225px);
   grid-template-rows: 1fr;
   gap: 1rem;
   padding: 2rem;
+}
+
+.artifact {
+  position: relative;
 }
 
 .artifact-head,
@@ -118,6 +126,18 @@ body {
   color: var(--grey);
 }
 
+.delete-artifact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(-25%, 25%);
+  width: 20px;
+  height: auto;
+}
+
 .add-new {
   background-color: transparent;
   color: var(--silver);
@@ -126,13 +146,13 @@ body {
   font-size: 3em;
 }
 
-label {
-  display: block;
-}
-
 #new-artifact {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.hidden {
+  display: none;
 }

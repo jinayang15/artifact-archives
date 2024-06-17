@@ -3,7 +3,7 @@ Place to store your Genshin Artifacts!
 
 Features to implement:
 --- Basic Functionality
-- [] Add delete artifact button
+- [x] Add delete artifact button
 - [] Add lock button
 --- Further Developing
 - [] Polish the look of the artifact cards
