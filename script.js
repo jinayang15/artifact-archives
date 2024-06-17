@@ -44,6 +44,7 @@ function addArtifactToCollection(collectionDiv, artifact) {
   const artifactHeader = document.createElement("div");
   const artifactStats = document.createElement("div");
   artifactDiv.classList.add("artifact");
+  artifactDiv.setAttribute("data-index");
   artifactHeader.classList.add("artifact-head");
   artifactStats.classList.add("artifact-stats");
 
@@ -62,17 +63,17 @@ function addArtifactToCollection(collectionDiv, artifact) {
 }
 
 function createNewArtifact() {
-  const artifactSet = document.querySelector("#artifact-set").value;
-  const artifactType = document.querySelector("#artifact-type").value;
-  const artifactRarity = document.querySelector("#artifact-rarity").value;
-  const artifactLevel = document.querySelector("#artifact-level").value;
-  const artifactMainstat = document.querySelector("#artifact-mainstat").value;
-  const artifactMainstatValue = document.querySelector(
+  const artifactSet = document.getElementById("artifact-set").value;
+  const artifactType = document.getElementById("artifact-type").value;
+  const artifactRarity = document.getElementById("artifact-rarity").value;
+  const artifactLevel = document.getElementById("artifact-level").value;
+  const artifactMainstat = document.getElementById("artifact-mainstat").value;
+  const artifactMainstatValue = document.getElementById(
     "#artifact-mainstat-value"
   ).value;
-  const artifactSubstat = document.querySelector("#artifact-substat-1").value;
-  const artifactSubstatValue = document.querySelector(
-    "#artifact-substat-1-value"
+  const artifactSubstat = document.getElementById("artifact-substat-1").value;
+  const artifactSubstatValue = document.getElementById(
+    "artifact-substat-1-value"
   ).value;
 
   const mainstat = new Stat(artifactMainstat, artifactMainstatValue, "");
@@ -106,13 +107,13 @@ function main() {
     addArtifactToCollection(collectionDiv, artifact);
   }
 
-  const newArtifactForm = document.querySelector("#new-artifact");
+  const newArtifactForm = document.getElementById("new-artifact");
   const addNewButton = document.querySelector(".add-new");
   addNewButton.addEventListener("click", () => {
     newArtifactForm.showModal();
   });
 
-  const newArtifactFormBtn = document.querySelector("#new-artifact-submit");
+  const newArtifactFormBtn = document.getElementById("new-artifact-submit");
   newArtifactFormBtn.addEventListener("click", (event) => {
     event.preventDefault();
     addArtifactToCollection(collectionDiv, createNewArtifact());
