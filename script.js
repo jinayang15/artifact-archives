@@ -6,14 +6,14 @@
     Stat mainstat - artifact main stat
     Array[Stat] - 1 to 4 substats
 */
-function Artifact(set, type, rarity, level, mainstat, substats, locked) {
+function Artifact(set, type, rarity, level, locked, mainstat, substats) {
   this.set = set;
   this.type = type;
   this.rarity = rarity;
   this.level = level;
+  this.locked = locked;
   this.mainstat = mainstat;
   this.substats = substats;
-  this.locked = locked;
 }
 Artifact.prototype.toString = function () {
   let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
@@ -52,30 +52,12 @@ function addArtifactToCollection(artifacts, collectionDiv, artifact, index) {
   const artifactStats = document.createElement("div");
   const deleteArtifactDiv = document.createElement("div");
   const xSymbol = document.createElement("img");
+  const lockDiv = document.createElement("div");
 
   artifactDiv.classList.add("artifact");
   artifactDiv.dataset.index = index;
-  artifactDiv.addEventListener("mouseover", () => {
-    unhideElement(deleteArtifactDiv);
-  });
-  artifactDiv.addEventListener("mouseout", () => {
-    hideElement(deleteArtifactDiv);
-  });
-  artifactHeader.classList.add("artifact-head");
-  artifactStats.classList.add("artifact-stats");
-  artifactHeader.textContent = "Artifact Set";
 
-  hideElement(deleteArtifactDiv);
-  deleteArtifactDiv.classList.add("delete-artifact");
-  deleteArtifactDiv.dataset.index = index;
-  deleteArtifactDiv.addEventListener("click", () => {
-    removeArtifact(artifacts, collectionDiv, deleteArtifactDiv.dataset.index);
-  });
-
-  xSymbol.src = "assets/x-symbol.svg";
-  xSymbol.alt = "Delete Button";
-  deleteArtifactDiv.appendChild(xSymbol);
-
+  // parse artifact stats
   const infoArr = String(artifact).split("\n");
   for (const stat of infoArr) {
     const text = document.createElement("p");
@@ -83,10 +65,59 @@ function addArtifactToCollection(artifacts, collectionDiv, artifact, index) {
     artifactStats.appendChild(text);
   }
 
+  // delete button appears on hover
+  artifactDiv.addEventListener("mouseover", () => {
+    unhideElement(deleteArtifactDiv);
+    if (!artifact.locked) unhideElement(lockDiv);
+  });
+  artifactDiv.addEventListener("mouseout", () => {
+    hideElement(deleteArtifactDiv);
+    if (!artifact.locked) hideElement(lockDiv);
+  });
+
+  artifactHeader.classList.add("artifact-head");
+  artifactStats.classList.add("artifact-stats");
+  artifactHeader.textContent = "Artifact Set";
+
+  // delete button removes artifact
+  hideElement(deleteArtifactDiv);
+  deleteArtifactDiv.classList.add("delete-artifact");
+  deleteArtifactDiv.dataset.index = index;
+  deleteArtifactDiv.addEventListener("click", () => {
+    removeArtifact(artifacts, collectionDiv, deleteArtifactDiv.dataset.index);
+  });
+
+  lockDiv.classList.add("lock-artifact");
+  lockDiv.dataset.index = index;
+  addLockSymbol(artifact, lockDiv);
+  // changes between locked and unlocked
+  lockDiv.addEventListener("click", () => {
+    changeArtifactLock(artifact, lockDiv);
+  });
+
+  xSymbol.src = "assets/x-symbol.svg";
+  xSymbol.alt = "Delete Button";
+
+  deleteArtifactDiv.appendChild(xSymbol);
+
   artifactDiv.appendChild(artifactHeader);
   artifactDiv.appendChild(artifactStats);
   artifactDiv.appendChild(deleteArtifactDiv);
+  artifactDiv.appendChild(lockDiv);
   collectionDiv.appendChild(artifactDiv);
+}
+
+function addLockSymbol(artifact, lockDiv) {
+  const lockSymbol = document.createElement("img");
+  if (artifact.locked) {
+    lockSymbol.src = "assets/lock_closed.svg";
+    lockSymbol.alt = "Locked Artifact";
+  } else {
+    lockSymbol.src = "assets/lock_opened.svg";
+    lockSymbol.alt = "Unlocked Artifact";
+    hideElement(lockDiv);
+  }
+  lockDiv.appendChild(lockSymbol);
 }
 
 function createNewArtifact() {
@@ -94,6 +125,7 @@ function createNewArtifact() {
   const artifactType = document.getElementById("artifact-type").value;
   const artifactRarity = document.getElementById("artifact-rarity").value;
   const artifactLevel = document.getElementById("artifact-level").value;
+  const artifactLocked = document.getElementById("artifact-locked").checked;
   const artifactMainstat = document.getElementById("artifact-mainstat").value;
   const artifactMainstatValue = document.getElementById(
     "artifact-mainstat-value"
@@ -110,6 +142,7 @@ function createNewArtifact() {
     artifactType,
     artifactRarity,
     artifactLevel,
+    artifactLocked,
     mainstat,
     [substat]
   );
@@ -133,15 +166,25 @@ function displayAllArtifacts(artifacts, collectionDiv) {
     addArtifactToCollection(artifacts, collectionDiv, artifacts[i], i);
   }
 }
+
+function changeArtifactLock(artifact, lockDiv) {
+  artifact.locked = !artifact.locked;
+  lockDiv.textContent = "";
+  addLockSymbol(artifact, lockDiv);
+}
+
 // for testing purposes
 function randomArtifactGenerator() {
   const set = "blahblahblah";
   const type = "flower";
   const rarity = Math.floor(Math.random() * 5) + 1;
   const level = Math.floor(Math.random() * 20) + 1;
+  const locked = true;
   const mainstat = new Stat("HP%", 10, "%");
   const substat = new Stat("DEF%", 17.9, "%");
-  const artifact = new Artifact(set, type, rarity, level, mainstat, [substat]);
+  const artifact = new Artifact(set, type, rarity, level, locked, mainstat, [
+    substat,
+  ]);
   return artifact;
 }
 
@@ -150,6 +193,7 @@ function main() {
   const collectionDiv = document.querySelector(".artifact-collection");
   displayAllArtifacts(artifacts, collectionDiv);
 
+  // new artifact form
   const newArtifactForm = document.getElementById("new-artifact");
   const addNewButton = document.querySelector(".add-new");
   addNewButton.addEventListener("click", () => {

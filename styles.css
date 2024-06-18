@@ -143,6 +143,15 @@ label {
   height: auto;
 }
 
+.lock-artifact {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(25%, 25%);
+  width: 20px;
+  height: auto;
+}
+
 .add-new {
   background-color: transparent;
   color: var(--silver);

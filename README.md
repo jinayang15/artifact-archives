@@ -6,7 +6,7 @@ Features to implement:
 --- Basic Functionality
 
 - [x] Add delete artifact button
-- [ ] Add lock button
+- [x] Add lock button
 
 --- Further Developing
 
