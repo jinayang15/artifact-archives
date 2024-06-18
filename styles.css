@@ -104,6 +104,10 @@ label {
 
 .artifact {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow: auto;
 }
 
 .artifact-head,
@@ -124,6 +128,7 @@ label {
 .artifact-stats {
   background-color: var(--white);
   color: var(--grey);
+  flex: 1;
 }
 
 .delete-artifact {
