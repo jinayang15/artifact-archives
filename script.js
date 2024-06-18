@@ -6,24 +6,21 @@
     Stat mainstat - artifact main stat
     Array[Stat] - 1 to 4 substats
 */
-function Artifact(set, type, rarity, level, mainstat, substats) {
+function Artifact(set, type, rarity, level, mainstat, substats, locked) {
   this.set = set;
   this.type = type;
   this.rarity = rarity;
   this.level = level;
   this.mainstat = mainstat;
   this.substats = substats;
-  this.index = Artifact.currentIndex++;
+  this.locked = locked;
 }
-
-Artifact.currentIndex = 0;
-
 Artifact.prototype.toString = function () {
   let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
   for (let i = 1; i <= this.substats.length; i++) {
     output += `Substat ${i}: ` + this.substats[i - 1] + "\n";
   }
-  output.trim();
+  output = output.trim();
   return output;
 };
 
@@ -49,7 +46,7 @@ function unhideElement(element) {
   element.classList.remove("hidden");
 }
 
-function addArtifactToCollection(artifacts, collectionDiv, artifact) {
+function addArtifactToCollection(artifacts, collectionDiv, artifact, index) {
   const artifactDiv = document.createElement("div");
   const artifactHeader = document.createElement("div");
   const artifactStats = document.createElement("div");
@@ -57,7 +54,7 @@ function addArtifactToCollection(artifacts, collectionDiv, artifact) {
   const xSymbol = document.createElement("img");
 
   artifactDiv.classList.add("artifact");
-  artifactDiv.dataset.index = artifact.index;
+  artifactDiv.dataset.index = index;
   artifactDiv.addEventListener("mouseover", () => {
     unhideElement(deleteArtifactDiv);
   });
@@ -70,7 +67,7 @@ function addArtifactToCollection(artifacts, collectionDiv, artifact) {
 
   hideElement(deleteArtifactDiv);
   deleteArtifactDiv.classList.add("delete-artifact");
-  deleteArtifactDiv.dataset.index = artifact.index;
+  deleteArtifactDiv.dataset.index = index;
   deleteArtifactDiv.addEventListener("click", () => {
     removeArtifact(artifacts, collectionDiv, deleteArtifactDiv.dataset.index);
   });
@@ -120,21 +117,20 @@ function createNewArtifact() {
 }
 
 function removeArtifact(artifacts, collectionDiv, index) {
-  const artifactDiv = document.querySelector(
-    `.artifact[data-index='${index}']`
-  );
-  console.log(collectionDiv.removeChild(artifactDiv));
-  for (let i = 0; i < artifacts.length; i++) {
-    if (artifacts[i].index == index) {
-      artifacts.splice(i, 1);
-      break;
-    }
-  }
+  artifacts.splice(index, 1);
+  removeAllArtifacts(collectionDiv);
+  displayAllArtifacts(artifacts, collectionDiv);
+}
+
+function removeAllArtifacts(collectionDiv) {
+  const addNewButton = document.querySelector(".add-new");
+  collectionDiv.textContent = "";
+  collectionDiv.appendChild(addNewButton);
 }
 
 function displayAllArtifacts(artifacts, collectionDiv) {
-  for (artifact of artifacts) {
-    addArtifactToCollection(artifacts, collectionDiv, artifact);
+  for (let i = 0; i < artifacts.length; i++) {
+    addArtifactToCollection(artifacts, collectionDiv, artifacts[i], i);
   }
 }
 // for testing purposes
@@ -163,7 +159,14 @@ function main() {
   const newArtifactFormBtn = document.getElementById("new-artifact-submit");
   newArtifactFormBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    addArtifactToCollection(artifacts, collectionDiv, createNewArtifact());
+    const newArtifact = createNewArtifact();
+    addArtifactToCollection(
+      artifacts,
+      collectionDiv,
+      newArtifact,
+      artifacts.length
+    );
+    artifacts.push(newArtifact);
     newArtifactForm.close();
   });
 }
