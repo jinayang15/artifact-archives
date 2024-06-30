@@ -6,37 +6,41 @@
     Stat mainstat - artifact main stat
     Array[Stat] - 1 to 4 substats
 */
-function Artifact(set, type, rarity, level, locked, mainstat, substats) {
-  this.set = set;
-  this.type = type;
-  this.rarity = rarity;
-  this.level = level;
-  this.locked = locked;
-  this.mainstat = mainstat;
-  this.substats = substats;
-}
-Artifact.prototype.toString = function () {
-  let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
-  for (let i = 1; i <= this.substats.length; i++) {
-    output += `Substat ${i}: ` + this.substats[i - 1] + "\n";
-  }
-  output = output.trim();
-  return output;
-};
 
+class Artifact {
+  constructor(set, type, rarity, level, locked, mainstat, substats) {
+    this.set = set;
+    this.type = type;
+    this.rarity = rarity;
+    this.level = level;
+    this.locked = locked;
+    this.mainstat = mainstat;
+    this.substats = substats;
+  }
+  toString() {
+    let output = `Set: ${this.set}\nType: ${this.type}\nRarity: ${this.rarity}\nLevel: ${this.level}\nMainstat: ${this.mainstat}\n`;
+    for (let i = 1; i <= this.substats.length; i++) {
+      output += `Substat ${i}: ` + this.substats[i - 1] + "\n";
+    }
+    output = output.trim();
+    return output;
+  }
+}
 /*
     String type - type of stat
     Number value - amount of stat
     String unit - unit of value
 */
-function Stat(type, value, unit) {
-  this.type = type;
-  this.value = value;
-  this.unit = unit;
+class Stat {
+  constructor(type, value, unit) {
+    this.type = type;
+    this.value = value;
+    this.unit = unit;
+  }
+  toString() {
+    return `${this.value}${this.unit} ${this.type}`;
+  }
 }
-Stat.prototype.toString = function () {
-  return `${this.value}${this.unit} ${this.type}`;
-};
 
 function hideElement(element) {
   element.classList.add("hidden");
